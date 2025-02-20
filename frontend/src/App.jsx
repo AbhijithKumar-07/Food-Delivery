@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import { Route, Routes } from "react-router-dom";
-import Home from "./Pages/Home/home.jsx";
+import Home from "./Pages/Home/Home.jsx";
 import Cart from "./Pages/Cart/Cart.jsx";
 import PlaceOrder from "./Pages/PlaceOrder/PlaceOrder.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
