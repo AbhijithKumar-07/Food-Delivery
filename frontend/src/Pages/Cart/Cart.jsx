@@ -1,44 +1,44 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../Context/StoreContext";
-import { food_images, food_list as default_food_list } from "../../assets/assets";
+import { assets } from "../../assets/assets";
 import { useNavigate } from 'react-router-dom';
+
+const CartItemImage = ({ image, name, url }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
+  const getImageSrc = () => {
+    if (!image) return assets.logo;
+    if (typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("data:"))) {
+      return image;
+    }
+    return `${url}/images/${image}`;
+  };
+
+  return (
+    <div className="cart-item-img-container">
+      {!loaded && <div className="cart-item-skeleton"></div>}
+      <img
+        src={error ? assets.logo : getImageSrc()}
+        alt={name || "Item"}
+        className={`cart-item-img ${loaded ? 'loaded' : 'loading'}`}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        onError={() => {
+          setError(true);
+          setLoaded(true);
+        }}
+      />
+    </div>
+  );
+};
 
 const Cart = () => {
   const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } = useContext(StoreContext);
 
   const navigate = useNavigate();
-
-  const getImageSrc = (image, name) => {
-    if (!image) return "";
-    if (typeof image === "string") {
-      if (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("data:") || image.startsWith("/assets") || image.startsWith("/src") || image.startsWith("/")) {
-        return image;
-      }
-      const match = image.match(/food_\d+/i);
-      if (match && food_images && food_images[match[0].toLowerCase()]) {
-        return food_images[match[0].toLowerCase()];
-      }
-    }
-    if (name) {
-      const match = default_food_list.find(
-        (f) => f.name && f.name.toLowerCase().trim() === name.toLowerCase().trim()
-      );
-      if (match && match.image) {
-        return match.image;
-      }
-    }
-    return `${url}/images/${image}`;
-  };
-
-  const handleImageError = (e, name) => {
-    const match = default_food_list.find(
-      (f) => f.name && name && f.name.toLowerCase().trim() === name.toLowerCase().trim()
-    );
-    if (match && match.image && e.target.src !== match.image) {
-      e.target.src = match.image;
-    }
-  };
 
   return (
     <div className="cart">
@@ -58,12 +58,7 @@ const Cart = () => {
             return (
               <div key={item._id || index}>
                 <div className="cart-items-title cart-items-item">
-                  <img
-                    src={getImageSrc(item.image, item.name)}
-                    alt={item.name}
-                    loading="lazy"
-                    onError={(e) => handleImageError(e, item.name)}
-                  />
+                  <CartItemImage image={item.image} name={item.name} url={url} />
                   <p> {item.name} </p>
                   <p> ${item.price} </p>
                   <p> {cartItems[item._id]} </p>

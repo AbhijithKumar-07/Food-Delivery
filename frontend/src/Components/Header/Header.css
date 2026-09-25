@@ -5,7 +5,7 @@
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-    background: linear-gradient(135deg, #ffede6 0%, #fff7ed 100%);
+    background: transparent;
 }
 
 .header-bg-img {

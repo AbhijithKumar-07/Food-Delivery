@@ -1,12 +1,11 @@
 import React from 'react'
 import "./Header.css"
-import headerImg from '../../assets/header_img.webp'
 
 const Header = () => {
   return (
     <div className='header'>
       <img
-        src={headerImg}
+        src="/header_img.webp"
         alt="Featured Cuisine"
         className="header-bg-img"
         fetchPriority="high"
