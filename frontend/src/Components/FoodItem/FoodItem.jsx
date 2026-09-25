@@ -1,53 +1,38 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import "./FoodItem.css"
-import { assets, food_images, food_list as default_food_list } from '../../assets/assets'
+import { assets } from '../../assets/assets'
 import { StoreContext } from '../../Context/StoreContext'
 
 const FoodItem = ({id,name,price,description,image}) => {
     const {cartItems,addToCart,removeFromCart,url} = useContext(StoreContext);
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [hasError, setHasError] = useState(false);
 
+    // Fetch images directly from Database URL
     const getImageSrc = () => {
       if (!image) return assets.logo;
-      if (typeof image === 'string') {
-        if (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:') || image.startsWith('/assets') || image.startsWith('/src') || image.startsWith('/')) {
-          return image;
-        }
-        // Match standard food_1 ... food_32 filenames from database
-        const match = image.match(/food_\d+/i);
-        if (match && food_images && food_images[match[0].toLowerCase()]) {
-          return food_images[match[0].toLowerCase()];
-        }
-      }
-      // Match by dish name
-      if (name) {
-        const standardDish = default_food_list.find(
-          (f) => f.name && f.name.toLowerCase().trim() === name.toLowerCase().trim()
-        );
-        if (standardDish && standardDish.image) {
-          return standardDish.image;
-        }
+      if (typeof image === 'string' && (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:'))) {
+        return image;
       }
       return `${url}/images/${image}`;
     };
 
-    const handleImageError = (e) => {
-      const match = default_food_list.find(
-        (f) => f.name && name && f.name.toLowerCase().trim() === name.toLowerCase().trim()
-      );
-      if (match && match.image && e.target.src !== match.image) {
-        e.target.src = match.image;
-      }
+    const handleImageError = () => {
+      setHasError(true);
+      setImageLoaded(true);
     };
 
   return (
     <div className='food-item'>
       <div className="food-item-img-container">
+        {!imageLoaded && <div className="skeleton-image-loader"></div>}
         <img
-          src={getImageSrc()}
-          alt={name || "Dish"}
-          className='food-item-img'
+          src={hasError ? assets.logo : getImageSrc()}
+          alt={name || "Food Item"}
+          className={`food-item-img ${imageLoaded ? 'loaded' : 'loading'}`}
           loading="lazy"
           decoding="async"
+          onLoad={() => setImageLoaded(true)}
           onError={handleImageError}
         />
         {
