@@ -2,9 +2,21 @@
 .header {
     height: 34vw;
     margin: 30px auto;
-    background: url('/header_img.webp') no-repeat, url('/header_img.png') no-repeat;
-    background-size: contain;
     position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #23272f;
+}
+
+.header-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: block;
 }
 
 .header-contents {
@@ -16,9 +28,8 @@
     max-width: 50%;
     bottom: 10%;
     left: 6vw;
-    animation-name: fadeIn;
-    animation-duration: 3s;
-    /* animation-timing-function: linear; */
+    z-index: 2;
+    animation: fadeIn 1s ease-in-out;
 }
 
 .header-contents h2 {

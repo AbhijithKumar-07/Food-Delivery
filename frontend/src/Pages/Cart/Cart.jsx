@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../Context/StoreContext";
-import { food_list as default_food_list } from "../../assets/assets";
+import { food_images, food_list as default_food_list } from "../../assets/assets";
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
@@ -9,10 +9,24 @@ const Cart = () => {
 
   const navigate = useNavigate();
 
-  const getImageSrc = (image) => {
+  const getImageSrc = (image, name) => {
     if (!image) return "";
-    if (typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("data:") || image.startsWith("/assets") || image.startsWith("/src") || image.startsWith("/"))) {
-      return image;
+    if (typeof image === "string") {
+      if (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("data:") || image.startsWith("/assets") || image.startsWith("/src") || image.startsWith("/")) {
+        return image;
+      }
+      const match = image.match(/food_\d+/i);
+      if (match && food_images && food_images[match[0].toLowerCase()]) {
+        return food_images[match[0].toLowerCase()];
+      }
+    }
+    if (name) {
+      const match = default_food_list.find(
+        (f) => f.name && f.name.toLowerCase().trim() === name.toLowerCase().trim()
+      );
+      if (match && match.image) {
+        return match.image;
+      }
     }
     return `${url}/images/${image}`;
   };
@@ -45,7 +59,7 @@ const Cart = () => {
               <div key={item._id || index}>
                 <div className="cart-items-title cart-items-item">
                   <img
-                    src={getImageSrc(item.image)}
+                    src={getImageSrc(item.image, item.name)}
                     alt={item.name}
                     loading="lazy"
                     onError={(e) => handleImageError(e, item.name)}

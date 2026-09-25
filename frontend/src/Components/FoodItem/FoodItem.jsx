@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import "./FoodItem.css"
-import { assets, food_list as default_food_list } from '../../assets/assets'
+import { assets, food_images, food_list as default_food_list } from '../../assets/assets'
 import { StoreContext } from '../../Context/StoreContext'
 
 const FoodItem = ({id,name,price,description,image}) => {
@@ -8,8 +8,24 @@ const FoodItem = ({id,name,price,description,image}) => {
 
     const getImageSrc = () => {
       if (!image) return assets.logo;
-      if (typeof image === 'string' && (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:') || image.startsWith('/assets') || image.startsWith('/src') || image.startsWith('/'))) {
-        return image;
+      if (typeof image === 'string') {
+        if (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:') || image.startsWith('/assets') || image.startsWith('/src') || image.startsWith('/')) {
+          return image;
+        }
+        // Match standard food_1 ... food_32 filenames from database
+        const match = image.match(/food_\d+/i);
+        if (match && food_images && food_images[match[0].toLowerCase()]) {
+          return food_images[match[0].toLowerCase()];
+        }
+      }
+      // Match by dish name
+      if (name) {
+        const standardDish = default_food_list.find(
+          (f) => f.name && f.name.toLowerCase().trim() === name.toLowerCase().trim()
+        );
+        if (standardDish && standardDish.image) {
+          return standardDish.image;
+        }
       }
       return `${url}/images/${image}`;
     };

@@ -45,5 +45,3 @@ app.get("/api/ping",(req,res) => {
 app.listen(port,() => {
     console.log(`Listening To The Server🌐 On Port ${port}`);
 })
-
-// mongodb+srv://Abhi:Yak2006@fooddelivery.txvge.mongodb.net/?
