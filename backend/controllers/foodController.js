@@ -25,6 +25,7 @@ const addFood = async (req, res) => {
 const listFood = async (req,res) => {
   try {
     const foods = await foodModel.find();
+    res.setHeader('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     res.json({success:true,data:foods});
   } catch (error) {
     console.log(error);

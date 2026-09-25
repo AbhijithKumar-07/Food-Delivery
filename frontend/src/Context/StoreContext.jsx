@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-// import { food_list } from "../assets/assets";
-import axios from "axios"
+import { food_list as default_food_list } from "../assets/assets";
+import axios from "axios";
 
 // Global Context
 export const StoreContext = createContext(null);
@@ -10,33 +10,56 @@ const StoreContextProvider = ({ children }) => {
 
   const [cartItems, setCartItems] = useState({});
   const url = "https://food-delivery-backend-vewv.onrender.com";
-  const [token,setToken] = useState("");
-  const [food_list,setFoodlist] = useState([]);
+  const [token, setToken] = useState("");
+
+  // Instant Hydration: load from localStorage cache or fallback default list immediately (0ms wait)
+  const [food_list, setFoodlist] = useState(() => {
+    try {
+      const cached = localStorage.getItem("cached_food_list");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn("Could not load cached food list:", e);
+    }
+    return default_food_list;
+  });
+
+  const [loadingFood, setLoadingFood] = useState(false);
 
   const addToCart = async (itemId) => {
-    if (!cartItems[itemId]) {
-      setCartItems({
-        ...cartItems,
-        [itemId]: 1,
-      });
-    } else {
-      setCartItems({
-        ...cartItems,
-        [itemId]: cartItems[itemId] + 1,
-      });
-    }
+    setCartItems((prev) => ({
+      ...prev,
+      [itemId]: (prev[itemId] || 0) + 1,
+    }));
     if (token) {
-      await axios.post(url+"/api/cart/add",{itemId},{headers:{token}})
+      try {
+        await axios.post(url + "/api/cart/add", { itemId }, { headers: { token } });
+      } catch (err) {
+        console.error("Error adding to cart:", err);
+      }
     }
   };
 
   const removeFromCart = async (itemId) => {
-    setCartItems({
-      ...cartItems,
-      [itemId]: cartItems[itemId] - 1,
+    setCartItems((prev) => {
+      const current = prev[itemId] || 0;
+      if (current <= 1) {
+        const updated = { ...prev };
+        delete updated[itemId];
+        return updated;
+      }
+      return { ...prev, [itemId]: current - 1 };
     });
     if (token) {
-      await axios.post(url+"/api/cart/remove",{itemId},{headers:{token}})
+      try {
+        await axios.post(url + "/api/cart/remove", { itemId }, { headers: { token } });
+      } catch (err) {
+        console.error("Error removing from cart:", err);
+      }
     }
   };
 
@@ -47,32 +70,58 @@ const StoreContextProvider = ({ children }) => {
         let itemInfo = food_list.find((product) => {
           return product._id === item;
         });
-        toatlAmount += itemInfo.price * cartItems[item];
+        if (itemInfo) {
+          toatlAmount += itemInfo.price * cartItems[item];
+        }
       }
     }
     return toatlAmount;
   }
 
   const fetchFoodList = async () => {
-    const response = await axios.get(url+"/api/food/list");
-    setFoodlist(response.data.data);
+    try {
+      setLoadingFood(true);
+      const response = await axios.get(url + "/api/food/list", { timeout: 20000 });
+      if (response.data && response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
+        setFoodlist(response.data.data);
+        try {
+          localStorage.setItem("cached_food_list", JSON.stringify(response.data.data));
+        } catch (e) {
+          console.warn("Could not save food list to cache:", e);
+        }
+      }
+    } catch (err) {
+      console.warn("Backend warming up or network issue. Using cached/default food list:", err.message);
+    } finally {
+      setLoadingFood(false);
+    }
   }
 
   const loadCartData = async (token) => {
-      const response = await axios.post(url+"/api/cart/get",{},{headers:{token}});
-      setCartItems(response.data.cartData);
+    try {
+      const response = await axios.post(url + "/api/cart/get", {}, { headers: { token } });
+      if (response.data && response.data.cartData) {
+        setCartItems(response.data.cartData);
+      }
+    } catch (err) {
+      console.error("Error loading cart data:", err);
+    }
   }
 
   useEffect(() => {
-    async function loadData() {
-      await fetchFoodList();
-      if (localStorage.getItem("token")) {
-        setToken(localStorage.getItem("token"));
-        await loadCartData(localStorage.getItem("token"));
-      }
+    // 1. Fetch fresh list from MongoDB in the background (non-blocking)
+    fetchFoodList();
+
+    // 2. Ping backend to wake Render free tier up immediately
+    axios.get(url + "/").catch(() => {});
+
+    // 3. Load user token and cart data
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+      loadCartData(storedToken);
     }
-    loadData();
-  },[]);
+  }, []);
 
   // Improving Cart Functionality On Login & LogOut Of User
 
@@ -114,6 +163,8 @@ const StoreContextProvider = ({ children }) => {
     url,
     token,
     setToken,
+    loadingFood,
+    fetchFoodList,
   };
 
   return (

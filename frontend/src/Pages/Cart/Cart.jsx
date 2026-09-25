@@ -1,12 +1,30 @@
 import React, { useContext } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../Context/StoreContext";
+import { food_list as default_food_list } from "../../assets/assets";
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } = useContext(StoreContext);
 
   const navigate = useNavigate();
+
+  const getImageSrc = (image) => {
+    if (!image) return "";
+    if (typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("data:") || image.startsWith("/assets") || image.startsWith("/src") || image.startsWith("/"))) {
+      return image;
+    }
+    return `${url}/images/${image}`;
+  };
+
+  const handleImageError = (e, name) => {
+    const match = default_food_list.find(
+      (f) => f.name && name && f.name.toLowerCase().trim() === name.toLowerCase().trim()
+    );
+    if (match && match.image && e.target.src !== match.image) {
+      e.target.src = match.image;
+    }
+  };
 
   return (
     <div className="cart">
@@ -24,9 +42,14 @@ const Cart = () => {
         {food_list.map((item, index) => {
           if (cartItems[item._id] > 0) {
             return (
-              <div>
+              <div key={item._id || index}>
                 <div className="cart-items-title cart-items-item">
-                  <img src={url+"/images/"+item.image} alt="" />
+                  <img
+                    src={getImageSrc(item.image)}
+                    alt={item.name}
+                    loading="lazy"
+                    onError={(e) => handleImageError(e, item.name)}
+                  />
                   <p> {item.name} </p>
                   <p> ${item.price} </p>
                   <p> {cartItems[item._id]} </p>

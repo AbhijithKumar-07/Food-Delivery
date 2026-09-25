@@ -20,14 +20,26 @@ connectDB();
 
 // api endpoints
 app.use("/api/food",foodRouter);
-app.use("/images",express.static('uploads'));
+app.use("/images", express.static('uploads', {
+    maxAge: '30d',
+    etag: true,
+    lastModified: true,
+    setHeaders: (res, path) => {
+        res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+    }
+}));
 app.use("/api/user",userRouter);
 app.use("/api/cart",cartRouter);
 app.use("/api/order",orderRouter);
 
 
 app.get("/",(req,res) => {
+    res.setHeader('Cache-Control', 'no-cache');
     res.send("API Working!");
+})
+
+app.get("/api/ping",(req,res) => {
+    res.json({status: "ok", timestamp: Date.now()});
 })
 
 app.listen(port,() => {
