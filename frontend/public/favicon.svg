@@ -1,26 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
-    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FF5A36"/>
-      <stop offset="100%" stop-color="#E11D48"/>
+      <stop offset="100%" stop-color="#E22E1A"/>
     </linearGradient>
-    <filter id="subtleDrop" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.2"/>
-    </filter>
   </defs>
-  
-  <!-- Premium Squircle Badge -->
-  <rect width="64" height="64" rx="16" fill="url(#brandGrad)"/>
-  
-  <!-- Elegant Modern Food Cloche Icon -->
-  <g filter="url(#subtleDrop)" fill="#FFFFFF">
-    <!-- Top Handle -->
-    <circle cx="32" cy="19" r="3"/>
-    <!-- Cloche Dome -->
-    <path d="M 17 37 C 17 26.5 23.7 23.5 32 23.5 C 40.3 23.5 47 26.5 47 37 Z"/>
-    <!-- Base Plate -->
-    <rect x="13" y="40" width="38" height="4" rx="2"/>
-    <!-- Subtle Platter Accent -->
-    <rect x="24" y="47" width="16" height="2.5" rx="1.25" opacity="0.65"/>
+
+  <!-- Premium Smooth Squircle Tile -->
+  <rect width="64" height="64" rx="16" fill="url(#brandGradient)"/>
+
+  <!-- Iconic 'T.' Brandmark -->
+  <g fill="#FFFFFF">
+    <!-- Horizontal Crossbar of T -->
+    <rect x="14" y="16" width="28" height="6" rx="3"/>
+    <!-- Vertical Stem of T -->
+    <rect x="25" y="16" width="6" height="32" rx="3"/>
+    <!-- Signature 'Tomato.' Dot -->
+    <circle cx="46" cy="45" r="4.5"/>
   </g>
 </svg>
