@@ -1,42 +1,228 @@
-.add {
-    width: 70%;
-    margin-left: max(5vw,25px);
-    margin-top: 50px;
-    color: #6d6d6d;
-    font-size: 16px;
+.admin-page-container {
+    animation: fadeIn 0.4s ease-out;
 }
 
-.add form {
+.page-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: #64748b;
+}
+
+/* Form Card */
+.admin-form-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    max-width: 680px;
+}
+
+.add-food-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group.flex-1 {
+    flex: 1;
+}
+
+.form-grid-row {
+    display: flex;
     gap: 20px;
 }
 
-.add-img-upload img {
-    width: 120px;
+.form-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
 }
 
-.add-product-name, .add-product-description {
-    width: max(40%,280px);
+.req-star {
+    color: #ef4444;
 }
 
-.add-product-name input, .add-product-description textarea {
-    padding: 10px;
+/* Image Upload Dropzone */
+.image-upload-dropzone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    background: #f8fafc;
+    transition: all 0.2s ease;
+    overflow: hidden;
 }
 
-.add-category-price {
-    display: flex;
-    gap: 30px;
+.image-upload-dropzone:hover {
+    border-color: tomato;
+    background: #fff7ed;
 }
 
-.add-category-price select, .add-category-price input {
-    max-width: 120px;
-    padding: 10px;
-}
-
-.add-btn {
-    max-width: 120px;
-    border: none;
-    padding: 10px;
-    background-color: black;
-    color: white;
+.dropzone-label {
+    display: block;
     cursor: pointer;
+    padding: 24px;
+    text-align: center;
+}
+
+.empty-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.upload-icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffede6;
+    color: tomato;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.dropzone-prompt {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.dropzone-hint {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.preview-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.uploaded-preview-img {
+    max-height: 180px;
+    border-radius: 12px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.change-img-overlay {
+    margin-top: 12px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.change-img-overlay:hover {
+    background: #fca5a5;
+}
+
+/* Inputs */
+.admin-text-input,
+.admin-textarea,
+.admin-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #1e293b;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.admin-text-input:focus,
+.admin-textarea:focus,
+.admin-select:focus {
+    background: #ffffff;
+    border-color: tomato;
+    box-shadow: 0 0 0 3px #ffede6;
+}
+
+.admin-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+.price-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.price-input {
+    padding-left: 30px;
+}
+
+/* Submit Button */
+.admin-submit-btn {
+    background: linear-gradient(135deg, tomato 0%, #ff5238 100%);
+    color: #ffffff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 16px -2px rgba(255, 99, 71, 0.35);
+    transition: all 0.2s ease;
+}
+
+.admin-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -2px rgba(255, 99, 71, 0.45);
+}
+
+.admin-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+@media (max-width: 650px) {
+    .admin-form-card {
+        padding: 20px;
+    }
+    .form-grid-row {
+        flex-direction: column;
+    }
 }

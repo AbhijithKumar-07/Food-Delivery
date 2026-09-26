@@ -1,14 +1,134 @@
-.navbar {
+.admin-navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 4%;
+    padding: 14px 32px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.navbar .logo {
-    width: max(10%,80px);
+.admin-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-.navbar .profile {
-    width: 40px;
+.admin-brand-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.admin-logo {
+    width: 125px;
+    height: auto;
+}
+
+.admin-badge-pill {
+    background: #ffede6;
+    color: tomato;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #fed7aa;
+}
+
+.admin-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.status-live-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
+    animation: adminPulse 1.6s infinite;
+}
+
+@keyframes adminPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(22, 163, 74, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+    }
+}
+
+.status-live-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: #15803d;
+}
+
+.admin-profile-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 5px 14px 5px 6px;
+    border-radius: 50px;
+}
+
+.admin-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.admin-info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-user-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.2;
+}
+
+.admin-user-role {
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+    .admin-navbar {
+        padding: 12px 16px;
+    }
+    .admin-badge-pill,
+    .admin-status-indicator,
+    .admin-info-text {
+        display: none;
+    }
 }
