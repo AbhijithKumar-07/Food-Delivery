@@ -46,14 +46,6 @@ const Sidebar = () => {
           <span className="nav-label">Add New Item</span>
         </NavLink>
       </div>
-
-      <div className="sidebar-footer-card">
-        <div className="sidebar-system-status">
-          <span className="system-status-dot"></span>
-          <span className="system-status-text">Operations Console</span>
-        </div>
-        <span className="system-status-desc">All systems operational</span>
-      </div>
     </aside>
   );
 };
