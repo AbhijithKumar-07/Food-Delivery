@@ -156,6 +156,7 @@ const StoreContextProvider = ({ children }) => {
   }, [token]);
 
   const [showLogin, setShowLogin] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const clearCart = () => {
     setCartItems({});
@@ -181,6 +182,8 @@ const StoreContextProvider = ({ children }) => {
     fetchFoodList,
     showLogin,
     setShowLogin,
+    searchTerm,
+    setSearchTerm,
   };
 
   return (
