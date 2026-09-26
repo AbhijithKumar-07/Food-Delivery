@@ -4,24 +4,52 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 
 const List = ({ url }) => {
-  const [list, setList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [list, setList] = useState(() => {
+    try {
+      const cached = localStorage.getItem("admin_cached_food_list");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn("Could not parse cached admin food list:", e);
+    }
+    return [];
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem("admin_cached_food_list");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return false;
+      }
+    } catch (e) {}
+    return true;
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [deletingId, setDeletingId] = useState(null);
 
-  const fetchList = async () => {
+  const fetchList = async (showLoadingSpinner = false) => {
     try {
-      setLoading(true);
+      if (showLoadingSpinner || list.length === 0) setLoading(true);
       const response = await axios.get(`${url}/api/food/list`);
       if (response.data && response.data.success) {
-        setList(response.data.data || []);
+        const data = response.data.data || [];
+        setList(data);
+        try {
+          localStorage.setItem("admin_cached_food_list", JSON.stringify(data));
+        } catch (e) {}
       } else {
         toast.error("Failed to load food list");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Network error loading food list");
+      if (list.length === 0) {
+        toast.error("Network error loading food list");
+      }
     } finally {
       setLoading(false);
     }
@@ -36,7 +64,14 @@ const List = ({ url }) => {
       const response = await axios.post(`${url}/api/food/remove`, { id: foodId });
       if (response.data.success) {
         toast.success(`Removed "${foodName}" successfully`);
-        await fetchList();
+        // Optimistically update list
+        setList((prev) => {
+          const updated = prev.filter((item) => item._id !== foodId);
+          try {
+            localStorage.setItem("admin_cached_food_list", JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
       } else {
         toast.error(response.data.message || "Error removing food");
       }

@@ -5,8 +5,30 @@ import { toast } from "react-toastify";
 import { assets } from "../../assets/assets.js";
 
 const Orders = ({ url }) => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState(() => {
+    try {
+      const cached = localStorage.getItem("admin_cached_orders");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn("Could not load cached orders:", e);
+    }
+    return [];
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem("admin_cached_orders");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return false;
+      }
+    } catch (e) {}
+    return true;
+  });
   const [refreshing, setRefreshing] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +37,7 @@ const Orders = ({ url }) => {
   const fetchAllOrders = async (isManual = false) => {
     if (isManual) setRefreshing(true);
     try {
-      if (!isManual) setLoading(true);
+      if (!isManual && orders.length === 0) setLoading(true);
       const response = await axios.get(`${url}/api/order/list`);
       if (response.data && response.data.success) {
         // Sort newest orders first
@@ -23,12 +45,17 @@ const Orders = ({ url }) => {
           return new Date(b.date || 0) - new Date(a.date || 0);
         });
         setOrders(sorted);
+        try {
+          localStorage.setItem("admin_cached_orders", JSON.stringify(sorted));
+        } catch (e) {}
       } else {
         toast.error("Failed to load orders");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Error connecting to server");
+      if (orders.length === 0) {
+        toast.error("Error connecting to server");
+      }
     } finally {
       setLoading(false);
       if (isManual) setRefreshing(false);
@@ -45,9 +72,13 @@ const Orders = ({ url }) => {
       });
       if (response.data.success) {
         // Optimistic UI update
-        setOrders((prev) =>
-          prev.map((o) => (o._id === orderId ? { ...o, status: newStatus } : o))
-        );
+        setOrders((prev) => {
+          const updated = prev.map((o) => (o._id === orderId ? { ...o, status: newStatus } : o));
+          try {
+            localStorage.setItem("admin_cached_orders", JSON.stringify(updated));
+          } catch (e) {}
+          return updated;
+        });
         toast.success(`Order status updated to "${newStatus}"`);
       } else {
         toast.error("Failed to update status");
