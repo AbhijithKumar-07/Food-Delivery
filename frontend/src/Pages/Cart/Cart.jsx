@@ -55,10 +55,11 @@ const Cart = () => {
 
   const navigate = useNavigate();
 
-  const handleEmptyCart = () => {
-    if (window.confirm("Are you sure you want to empty your entire cart?")) {
-      clearCart();
-    }
+  const [showEmptyModal, setShowEmptyModal] = useState(false);
+
+  const confirmEmptyCart = () => {
+    clearCart();
+    setShowEmptyModal(false);
   };
 
   const [promoCode, setPromoCode] = useState("");
@@ -160,7 +161,7 @@ const Cart = () => {
             </p>
             <button
               className="empty-cart-pill-btn"
-              onClick={handleEmptyCart}
+              onClick={() => setShowEmptyModal(true)}
             >
               <svg
                 className="trash-icon"
@@ -430,6 +431,50 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
+      {/* Empty Cart Confirmation Modal UI */}
+      {showEmptyModal && (
+        <div className="empty-modal-backdrop" onClick={() => setShowEmptyModal(false)}>
+          <div className="empty-modal-card" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="empty-modal-close"
+              onClick={() => setShowEmptyModal(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            <div className="empty-modal-icon-badge">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+            </div>
+
+            <h3 className="empty-modal-heading">Empty Your Cart?</h3>
+            <p className="empty-modal-description">
+              Are you sure you want to remove all <strong>{totalItemsCount} {totalItemsCount === 1 ? 'item' : 'items'}</strong> from your cart? You will have to re-add your favorite dishes.
+            </p>
+
+            <div className="empty-modal-btn-row">
+              <button
+                className="empty-modal-cancel-btn"
+                onClick={() => setShowEmptyModal(false)}
+              >
+                Keep Items
+              </button>
+              <button
+                className="empty-modal-confirm-btn"
+                onClick={confirmEmptyCart}
+              >
+                Yes, Empty Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
