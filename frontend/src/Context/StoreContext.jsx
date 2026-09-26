@@ -153,6 +153,8 @@ const StoreContextProvider = ({ children }) => {
     }
   },[token]);
 
+  const [showLogin, setShowLogin] = useState(false);
+
   const contextValue = {
     food_list,
     cartItems,
@@ -165,6 +167,8 @@ const StoreContextProvider = ({ children }) => {
     setToken,
     loadingFood,
     fetchFoodList,
+    showLogin,
+    setShowLogin,
   };
 
   return (

@@ -48,6 +48,8 @@ const Cart = () => {
     removeFromCart,
     getTotalCartAmount,
     url,
+    token,
+    setShowLogin,
   } = useContext(StoreContext);
 
   const navigate = useNavigate();
@@ -105,6 +107,14 @@ const Cart = () => {
     }
   };
 
+  const handleProceedToCheckout = () => {
+    if (!token) {
+      setShowLogin(true);
+      return;
+    }
+    navigate("/order");
+  };
+
   if (totalItemsCount === 0) {
     return (
       <div className="cart-page">
@@ -154,15 +164,45 @@ const Cart = () => {
           <div className="step-divider"></div>
           <div className="step">
             <span className="step-num">2</span>
-            <span className="step-label">Delivery</span>
+            <span className="step-label">Checkout & Payment</span>
           </div>
           <div className="step-divider"></div>
           <div className="step">
             <span className="step-num">3</span>
-            <span className="step-label">Payment</span>
+            <span className="step-label">Order Confirmation</span>
           </div>
         </div>
       </div>
+
+      {/* Guest User Authentication Prompt */}
+      {!token && (
+        <div className="guest-auth-alert">
+          <div className="guest-alert-left">
+            <svg
+              className="guest-alert-icon"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div>
+              <p className="guest-alert-title">Sign in to complete your checkout</p>
+              <p className="guest-alert-sub">You can sign in or create a new account in just a few seconds.</p>
+            </div>
+          </div>
+          <button className="guest-alert-btn" onClick={() => setShowLogin(true)}>
+            Sign In / Sign Up
+          </button>
+        </div>
+      )}
 
       {/* Main 2-Column Cart Layout */}
       <div className="cart-layout">
@@ -347,7 +387,7 @@ const Cart = () => {
             {/* Checkout Action Button */}
             <button
               className="checkout-btn"
-              onClick={() => navigate("/order")}
+              onClick={handleProceedToCheckout}
             >
               <span>Proceed to Checkout</span>
               <svg
@@ -365,19 +405,34 @@ const Cart = () => {
               </svg>
             </button>
 
-            {/* Trust Badges */}
-            <div className="trust-badges">
-              <div className="trust-item">
-                <span className="trust-icon">🔒</span>
-                <span>Secure Checkout</span>
+            {/* Professional Payment Security & Gateway Badges */}
+            <div className="checkout-security-section">
+              <div className="security-guarantee">
+                <svg
+                  className="security-shield-icon"
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <div className="security-text">
+                  <span className="security-title">Guaranteed Safe Checkout</span>
+                  <span className="security-subtitle">256-Bit SSL Encrypted Payment</span>
+                </div>
               </div>
-              <div className="trust-item">
-                <span className="trust-icon">⚡</span>
-                <span>Fast 30 Min Delivery</span>
-              </div>
-              <div className="trust-item">
-                <span className="trust-icon">🌱</span>
-                <span>100% Fresh Food</span>
+
+              <div className="payment-gateways">
+                <span className="gateway-pill">Stripe</span>
+                <span className="gateway-pill">Visa</span>
+                <span className="gateway-pill">Mastercard</span>
+                <span className="gateway-pill">Amex</span>
+                <span className="gateway-pill">Apple Pay</span>
               </div>
             </div>
           </div>

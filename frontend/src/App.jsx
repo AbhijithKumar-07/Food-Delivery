@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home.jsx";
@@ -8,10 +8,10 @@ import Footer from "./Components/Footer/Footer.jsx";
 import LoginPopUp from "./Components/LoginPopUp/LoginPopUp.jsx";
 import Verify from "./Pages/Verify/Verify.jsx";
 import MyOrders from "./Pages/MyOrders/MyOrders.jsx";
+import { StoreContext } from "./Context/StoreContext.jsx";
 
 const App = () => {
-
-  const [showLogin,setShowLogin] = useState(false);
+  const { showLogin, setShowLogin } = useContext(StoreContext);
 
   return (
     <Fragment>

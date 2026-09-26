@@ -549,27 +549,117 @@
     transform: translateY(0);
 }
 
-/* Trust Badges */
-.trust-badges {
+/* Guest User Auth Alert */
+.guest-auth-alert {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 14px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.guest-alert-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.guest-alert-icon {
+    color: #ea580c;
+    flex-shrink: 0;
+}
+
+.guest-alert-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #9a3412;
+}
+
+.guest-alert-sub {
+    font-size: 12px;
+    color: #c2410c;
+}
+
+.guest-alert-btn {
+    background: #ea580c;
+    color: #ffffff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.guest-alert-btn:hover {
+    background: #c2410c;
+}
+
+/* Professional Security & Payment Badges */
+.checkout-security-section {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     margin-top: 24px;
     padding-top: 20px;
     border-top: 1px solid #f1f5f9;
 }
 
-.trust-item {
+.security-guarantee {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 12px;
-    color: #64748b;
-    font-weight: 500;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 10px;
 }
 
-.trust-icon {
-    font-size: 14px;
+.security-shield-icon {
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+.security-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.security-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.security-subtitle {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.payment-gateways {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.gateway-pill {
+    background: #f8fafc;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    border: 1px solid #e2e8f0;
 }
 
 /* Empty Cart State */
