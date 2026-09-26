@@ -375,22 +375,48 @@ const Cart = () => {
               </svg>
             </button>
 
-            {/* Clean, authentic Stripe checkout note */}
-            <div className="stripe-secure-note">
-              <svg
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-              <span>Secure checkout powered by Stripe</span>
+            {/* Secure Checkout Trust Badge */}
+            <div className="secure-checkout-card">
+              <div className="secure-badge-main">
+                <div className="secure-shield-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="15"
+                    height="15"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                  </svg>
+                </div>
+                <span className="secure-main-text">
+                  Secure checkout powered by <span className="stripe-wordmark">stripe</span>
+                </span>
+              </div>
+              <div className="secure-sub-badges">
+                <span className="trust-pill">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="11"
+                    height="11"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  256-Bit SSL
+                </span>
+                <span className="trust-pill">End-to-End Encrypted</span>
+                <span className="trust-pill">Guaranteed Safe</span>
+              </div>
             </div>
           </div>
         </div>
