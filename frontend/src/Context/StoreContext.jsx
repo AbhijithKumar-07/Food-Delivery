@@ -132,7 +132,25 @@ const StoreContextProvider = ({ children }) => {
     } catch (err) {
       console.error("Error loading cart data:", err);
     }
-  }
+  };
+
+  const fetchUserProfile = async (userToken) => {
+    try {
+      const response = await axios.get(url + "/api/user/profile", {
+        headers: { token: userToken },
+      });
+      if (response.data && response.data.success && response.data.name) {
+        setUserName(response.data.name);
+        try {
+          localStorage.setItem("userName", response.data.name);
+        } catch (e) {
+          console.warn("Could not save userName to localStorage:", e);
+        }
+      }
+    } catch (err) {
+      console.warn("Could not fetch user profile:", err);
+    }
+  };
 
   useEffect(() => {
     // 1. Fetch fresh list from MongoDB in the background (non-blocking)
@@ -146,6 +164,7 @@ const StoreContextProvider = ({ children }) => {
     if (storedToken) {
       setToken(storedToken);
       loadCartData(storedToken);
+      fetchUserProfile(storedToken);
     }
     const storedName = localStorage.getItem("userName");
     if (storedName) {
@@ -156,6 +175,7 @@ const StoreContextProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       loadCartData(token);
+      fetchUserProfile(token);
     }
   }, [token]);
 

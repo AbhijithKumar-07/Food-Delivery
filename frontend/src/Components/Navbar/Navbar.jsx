@@ -332,9 +332,8 @@ const Navbar = ({ setShowLogin }) => {
               <div className="profile-popover-menu">
                 <div className="profile-popover-header">
                   <span className="popover-greeting">
-                    Hi, <strong>{userName || "Foodie"}</strong> 👋
+                    Hi, <strong>{userName || "User"}</strong> 👋
                   </span>
-                  <span className="popover-status">Active Account</span>
                 </div>
 
                 <div className="profile-menu-item logout-item" onClick={logout}>
