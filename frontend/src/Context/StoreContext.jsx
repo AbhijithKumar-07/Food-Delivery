@@ -155,12 +155,20 @@ const StoreContextProvider = ({ children }) => {
     }
   }, [token]);
 
-  const [showLogin, setShowLogin] = useState(false);
+  const clearCart = () => {
+    setCartItems({});
+    try {
+      localStorage.removeItem("cartItems");
+    } catch (e) {
+      console.warn("Could not remove cart from localStorage:", e);
+    }
+  };
 
   const contextValue = {
     food_list,
     cartItems,
     setCartItems,
+    clearCart,
     addToCart,
     removeFromCart,
     getTotalCartAmount,

@@ -9,12 +9,13 @@ const Verify = () => {
     const [searchParams,setSearchParams] = useSearchParams();
     const success = searchParams.get("success");
     const orderId = searchParams.get("orderId");
-    const {url} = useContext(StoreContext);
+    const { url, clearCart } = useContext(StoreContext);
     const navigate = useNavigate();
 
     const verifyPayment = async () => {
         const response = await axios.post(url+"/api/order/verify",{success:success,orderId:orderId})
         if (response.data.success) {
+            clearCart();
             navigate("/myorders")
         } else {
             navigate("/")
