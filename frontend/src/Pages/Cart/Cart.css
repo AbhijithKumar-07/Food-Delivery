@@ -602,85 +602,42 @@
     background: #c2410c;
 }
 
-/* Stripe Secure Checkout Badge & Card */
-.secure-checkout-card {
-    margin-top: 20px;
-    padding: 14px 16px;
-    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+/* Stripe Secure Note */
+.stripe-secure-note {
+    margin-top: 18px;
+    padding: 10px 14px;
+    background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
-    transition: all 0.25s ease;
-}
-
-.secure-checkout-card:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-
-.secure-badge-main {
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    flex-wrap: wrap;
+    text-align: center;
 }
 
-.secure-shield-icon {
-    width: 26px;
-    height: 26px;
+.stripe-secure-icon {
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: #dcfce7;
-    color: #16a34a;
+    background: #e0e7ff;
+    color: #4f46e5;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 1px 3px rgba(22, 163, 74, 0.15);
 }
 
-.secure-main-text {
+.stripe-secure-text {
     font-size: 13px;
-    font-weight: 600;
-    color: #334155;
-    letter-spacing: -0.1px;
+    font-weight: 500;
+    color: #475569;
 }
 
 .stripe-wordmark {
     color: #635bff;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: -0.3px;
-}
-
-.secure-sub-badges {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.trust-pill {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    color: #64748b;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-}
-
-.trust-pill svg {
-    color: #16a34a;
+    font-weight: 700;
+    letter-spacing: -0.2px;
 }
 
 /* Empty Cart State */
