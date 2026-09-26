@@ -9,11 +9,11 @@ const Navbar = () => {
       <div className="admin-nav-left">
         <Link to="/orders" className="admin-brand-link">
           <img className='admin-logo' src={assets.logo} alt="Tomato Logo" />
-          <span className="admin-badge-pill">Admin Portal</span>
         </Link>
       </div>
 
       <div className="admin-nav-right">
+        <span className="admin-badge-pill">Admin Portal</span>
         <div className="admin-profile-chip">
           <img className='admin-avatar' src={assets.profile_image} alt="Admin Avatar" />
           <div className="admin-info-text">

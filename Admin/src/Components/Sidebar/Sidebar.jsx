@@ -48,8 +48,11 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar-footer-card">
-        <span className="footer-card-title">Tomato. v2.0</span>
-        <span className="footer-card-sub">Admin Dashboard</span>
+        <div className="sidebar-system-status">
+          <span className="system-status-dot"></span>
+          <span className="system-status-text">Operations Console</span>
+        </div>
+        <span className="system-status-desc">All systems operational</span>
       </div>
     </aside>
   );
