@@ -27,6 +27,36 @@
     color: #64748b;
 }
 
+.cart-subtitle-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.empty-cart-btn-header {
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.empty-cart-btn-header:hover {
+    background: #ffe4e6;
+    border-color: #fda4af;
+    color: #be123c;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(225, 29, 72, 0.15);
+}
+
 .highlight-badge {
     background: #ffede6;
     color: tomato;
@@ -303,6 +333,28 @@
 
 .continue-shopping-btn:hover {
     color: tomato;
+}
+
+.empty-cart-btn-footer {
+    background: transparent;
+    border: 1px solid #fecdd3;
+    color: #e11d48;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.empty-cart-btn-footer:hover {
+    background: #fff1f2;
+    border-color: #fda4af;
+    color: #be123c;
+    box-shadow: 0 2px 6px rgba(225, 29, 72, 0.12);
 }
 
 .delivery-meter {
