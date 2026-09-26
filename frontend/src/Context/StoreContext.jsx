@@ -155,6 +155,8 @@ const StoreContextProvider = ({ children }) => {
     }
   }, [token]);
 
+  const [showLogin, setShowLogin] = useState(false);
+
   const clearCart = () => {
     setCartItems({});
     try {
