@@ -1,6 +1,52 @@
-/* ============================================================
-   ADMIN ORDERS PAGE - MODERN OPERATIONS DASHBOARD
-   ============================================================ */
+/* Header Refresh Button */
+.admin-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #334155;
+  border: 1.5px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.2px;
+}
+
+.admin-refresh-btn:hover {
+  background: #ffffff;
+  border-color: #ff5238;
+  color: #ff5238;
+  box-shadow: 0 4px 14px rgba(255, 82, 56, 0.15);
+  transform: translateY(-2px);
+}
+
+.admin-refresh-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.admin-refresh-btn svg {
+  transition: transform 0.3s ease;
+  color: inherit;
+}
+
+.admin-refresh-btn:hover svg {
+  transform: rotate(45deg);
+}
+
+.admin-refresh-btn.spinning svg {
+  animation: adminSpin 0.8s linear infinite;
+}
+
+@keyframes adminSpin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 /* Metrics Summary Grid */
 .orders-metrics-grid {
@@ -322,30 +368,77 @@
   color: #334155;
 }
 
-/* Customer Block */
+/* Customer & Delivery Block */
 .customer-info-block {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
   font-size: 13px;
+}
+
+.customer-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.customer-detail-row.address-row {
+  align-items: flex-start;
+}
+
+.customer-icon-capsule {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.customer-detail-row:hover .customer-icon-capsule {
+  transform: scale(1.06);
+}
+
+.customer-icon-capsule.user-capsule {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+}
+
+.customer-icon-capsule.phone-capsule {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #059669;
+}
+
+.customer-icon-capsule.pin-capsule {
+  background: #fff1ee;
+  border: 1px solid #fed7aa;
+  color: #ea580c;
+  margin-top: 1px;
 }
 
 .customer-full-name {
   font-weight: 700;
   color: #0f172a;
+  font-size: 13.5px;
+  letter-spacing: -0.1px;
 }
 
 .customer-phone {
   font-weight: 600;
-  color: #475569;
-  font-size: 12px;
+  color: #334155;
+  font-size: 12.5px;
+  font-family: inherit;
 }
 
 .customer-address-line {
   color: #64748b;
   font-size: 12px;
-  line-height: 1.4;
-  margin-top: 2px;
+  line-height: 1.45;
+  font-weight: 500;
 }
 
 /* Price & Action Block */

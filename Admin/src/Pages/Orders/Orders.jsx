@@ -165,7 +165,13 @@ const Orders = ({ url }) => {
       {/* Metrics Summary Cards */}
       <div className="orders-metrics-grid">
         <div className="metric-card">
-          <div className="metric-icon-box total">📦</div>
+          <div className="metric-icon-box total">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
           <div className="metric-info">
             <span className="metric-label">Total Orders</span>
             <span className="metric-value">{orders.length}</span>
@@ -173,7 +179,12 @@ const Orders = ({ url }) => {
         </div>
 
         <div className="metric-card">
-          <div className="metric-icon-box active">🛵</div>
+          <div className="metric-icon-box active">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
           <div className="metric-info">
             <span className="metric-label">Active Deliveries</span>
             <span className="metric-value active-val">{activeOrdersCount}</span>
@@ -181,7 +192,12 @@ const Orders = ({ url }) => {
         </div>
 
         <div className="metric-card">
-          <div className="metric-icon-box completed">✓</div>
+          <div className="metric-icon-box completed">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
           <div className="metric-info">
             <span className="metric-label">Completed Orders</span>
             <span className="metric-value completed-val">{deliveredCount}</span>
@@ -189,7 +205,12 @@ const Orders = ({ url }) => {
         </div>
 
         <div className="metric-card">
-          <div className="metric-icon-box revenue">💰</div>
+          <div className="metric-icon-box revenue">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
           <div className="metric-info">
             <span className="metric-label">Total Revenue</span>
             <span className="metric-value revenue-val">${totalRevenue.toFixed(2)}</span>
@@ -289,18 +310,43 @@ const Orders = ({ url }) => {
                   <div className="order-body-col customer-col">
                     <div className="col-heading-label">Customer & Delivery</div>
                     <div className="customer-info-block">
-                      <span className="customer-full-name">
-                        👤 {order.address ? `${order.address.firstName || ""} ${order.address.lastName || ""}` : "Customer"}
-                      </span>
+                      <div className="customer-detail-row name-row">
+                        <span className="customer-icon-capsule user-capsule">
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                          </svg>
+                        </span>
+                        <span className="customer-full-name">
+                          {order.address ? `${order.address.firstName || ""} ${order.address.lastName || ""}` : "Customer"}
+                        </span>
+                      </div>
+
                       {order.address?.phone && (
-                        <span className="customer-phone">
-                          📞 {order.address.phone}
-                        </span>
+                        <div className="customer-detail-row phone-row">
+                          <span className="customer-icon-capsule phone-capsule">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                          </span>
+                          <span className="customer-phone">
+                            {order.address.phone}
+                          </span>
+                        </div>
                       )}
+
                       {order.address && (
-                        <span className="customer-address-line">
-                          📍 {order.address.street}, {order.address.city}, {order.address.state} - {order.address.zipcode}
-                        </span>
+                        <div className="customer-detail-row address-row">
+                          <span className="customer-icon-capsule pin-capsule">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                              <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                          </span>
+                          <span className="customer-address-line">
+                            {order.address.street}, {order.address.city}, {order.address.state} - {order.address.zipcode}
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>
