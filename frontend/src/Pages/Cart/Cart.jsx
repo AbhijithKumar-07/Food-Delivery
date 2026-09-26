@@ -65,9 +65,8 @@ const Cart = () => {
     0
   );
 
-  // Delivery fee logic: Free delivery over $50, otherwise $2
-  const isFreeDelivery = subtotal >= 50 && subtotal > 0;
-  const deliveryFee = subtotal === 0 ? 0 : isFreeDelivery ? 0 : 2;
+  // Standard $2 delivery fee on all orders (as configured in backend)
+  const deliveryFee = subtotal === 0 ? 0 : 2;
   const finalTotal = Math.max(0, subtotal - discount + deliveryFee);
 
   const handleApplyPromo = (e) => {
@@ -84,10 +83,6 @@ const Cart = () => {
       setDiscount(5);
       setAppliedPromo("SAVE5 ($5 OFF)");
       setPromoMessage({ text: "$5 discount applied successfully! 🎁", type: "success" });
-    } else if (code === "FREEDEL") {
-      setDiscount(deliveryFee);
-      setAppliedPromo("FREEDEL (Free Delivery)");
-      setPromoMessage({ text: "Free delivery unlocked! 🚀", type: "success" });
     } else {
       setPromoMessage({ text: "Invalid promo code. Try 'FEAST20' or 'SAVE5'", type: "error" });
     }
@@ -293,30 +288,11 @@ const Cart = () => {
             })}
           </div>
 
-          {/* Continue Shopping & Free Delivery Meter */}
+          {/* Continue Shopping Action */}
           <div className="cart-items-footer">
             <button className="continue-shopping-btn" onClick={() => navigate("/")}>
               ← Continue Shopping
             </button>
-            {subtotal < 50 && (
-              <div className="delivery-meter">
-                <p>
-                  Add <strong>${(50 - subtotal).toFixed(2)}</strong> more to get{" "}
-                  <span className="free-tag">FREE Delivery</span>!
-                </p>
-                <div className="meter-track">
-                  <div
-                    className="meter-fill"
-                    style={{ width: `${Math.min(100, (subtotal / 50) * 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-            )}
-            {subtotal >= 50 && (
-              <div className="free-delivery-unlocked">
-                🎉 You've unlocked <strong>FREE Delivery</strong>!
-              </div>
-            )}
           </div>
         </div>
 
@@ -344,27 +320,21 @@ const Cart = () => {
               )}
 
               <div className="summary-row">
-                <span>Estimated Delivery</span>
-                <span className="row-val">
-                  {deliveryFee === 0 ? (
-                    <span className="free-delivery-badge">FREE</span>
-                  ) : (
-                    `$${deliveryFee.toFixed(2)}`
-                  )}
-                </span>
+                <span>Delivery Fee</span>
+                <span className="row-val">${deliveryFee.toFixed(2)}</span>
               </div>
 
               <div className="summary-divider"></div>
 
               <div className="summary-row total-row">
-                <span>Grand Total</span>
+                <span>Total Amount</span>
                 <span className="total-val">${finalTotal.toFixed(2)}</span>
               </div>
             </div>
 
             {/* Promo Code Input Box */}
             <div className="promo-box">
-              <p className="promo-title">Have a coupon or promo code?</p>
+              <p className="promo-title">Have a promo code?</p>
               <form onSubmit={handleApplyPromo} className="promo-form">
                 <input
                   type="text"
@@ -405,35 +375,22 @@ const Cart = () => {
               </svg>
             </button>
 
-            {/* Professional Payment Security & Gateway Badges */}
-            <div className="checkout-security-section">
-              <div className="security-guarantee">
-                <svg
-                  className="security-shield-icon"
-                  viewBox="0 0 24 24"
-                  width="18"
-                  height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                <div className="security-text">
-                  <span className="security-title">Guaranteed Safe Checkout</span>
-                  <span className="security-subtitle">256-Bit SSL Encrypted Payment</span>
-                </div>
-              </div>
-
-              <div className="payment-gateways">
-                <span className="gateway-pill">Stripe</span>
-                <span className="gateway-pill">Visa</span>
-                <span className="gateway-pill">Mastercard</span>
-                <span className="gateway-pill">Amex</span>
-                <span className="gateway-pill">Apple Pay</span>
-              </div>
+            {/* Clean, authentic Stripe checkout note */}
+            <div className="stripe-secure-note">
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Secure checkout powered by Stripe</span>
             </div>
           </div>
         </div>

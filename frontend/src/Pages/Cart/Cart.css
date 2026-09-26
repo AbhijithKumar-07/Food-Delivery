@@ -602,64 +602,23 @@
     background: #c2410c;
 }
 
-/* Professional Security & Payment Badges */
-.checkout-security-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid #f1f5f9;
-}
-
-.security-guarantee {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 10px 14px;
-    border-radius: 10px;
-}
-
-.security-shield-icon {
-    color: #16a34a;
-    flex-shrink: 0;
-}
-
-.security-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.security-title {
-    font-size: 12px;
-    font-weight: 600;
-    color: #1e293b;
-}
-
-.security-subtitle {
-    font-size: 11px;
-    color: #64748b;
-}
-
-.payment-gateways {
+/* Stripe Secure Note */
+.stripe-secure-note {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    flex-wrap: wrap;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
 }
 
-.gateway-pill {
-    background: #f8fafc;
-    color: #475569;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 6px;
-    letter-spacing: 0.3px;
-    border: 1px solid #e2e8f0;
+.stripe-secure-note svg {
+    color: #6366f1;
+    flex-shrink: 0;
 }
 
 /* Empty Cart State */
