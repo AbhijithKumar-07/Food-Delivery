@@ -36,14 +36,21 @@ const Navbar = ({setShowLogin}) => {
           <div className={ getTotalCartAmount() === 0 ? "" : "dot" }></div>
         </div>
         {
-          !token ? <button onClick={() => setShowLogin(true)}>Sign In</button> : 
-          <div className="navbar-profile">
-            <img src={assets.profile_icon} alt="" />
-            <ul className="nav-profile-dropdown">
-              <li onClick={() => navigate("/myorders")}> <img src={assets.bag_icon} alt="" /> <p>Orders</p> </li>
-              <hr />
-              <li onClick={logout} > <img src={assets.logout_icon} alt="" /> <p>Logout</p> </li>
-            </ul>
+          !token ? <button className="navbar-signin-btn" onClick={() => setShowLogin(true)}>Sign In</button> : 
+          <div className="navbar-user-actions">
+            <button className="navbar-orders-btn" onClick={() => navigate("/myorders")}>
+              <img src={assets.bag_icon} alt="" />
+              <span>Orders</span>
+            </button>
+            <div className="navbar-profile">
+              <img src={assets.profile_icon} alt="" className="profile-avatar" />
+              <ul className="nav-profile-dropdown">
+                <li onClick={logout} className="dropdown-logout-item">
+                  <img src={assets.logout_icon} alt="" />
+                  <p>Logout</p>
+                </li>
+              </ul>
+            </div>
           </div>
         }
       </div>
