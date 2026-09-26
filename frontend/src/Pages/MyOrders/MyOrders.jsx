@@ -6,7 +6,7 @@ import { assets } from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
 
 const MyOrders = () => {
-  const { url, token, addToCart } = useContext(StoreContext);
+  const { url, token, setCartItems } = useContext(StoreContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -25,16 +25,20 @@ const MyOrders = () => {
         { headers: { token } }
       );
       if (response.data && response.data.data) {
-        // Sort newest orders first
-        const sorted = [...response.data.data].sort((a, b) => {
+        const orderList = Array.isArray(response.data.data) ? response.data.data : [];
+        const sorted = [...orderList].sort((a, b) => {
           return new Date(b.date || 0) - new Date(a.date || 0);
         });
         setData(sorted);
 
-        // Smart tab selection on initial fetch: default to past if no live orders exist
+        // Smart tab selection: default to past if no live orders exist
         const hasLive = sorted.some((order) => {
           const status = (order.status || "").toLowerCase().trim();
-          return status === "food processing" || status === "out for delivery" || status === "order placed";
+          return (
+            status === "food processing" ||
+            status === "out for delivery" ||
+            status === "order placed"
+          );
         });
         if (!hasLive) {
           setActiveTab("past");
@@ -60,17 +64,23 @@ const MyOrders = () => {
 
   // Differentiate current/live orders from past orders
   const isLiveOrder = (order) => {
+    if (!order) return false;
     const status = (order.status || "").toLowerCase().trim();
-    return status === "food processing" || status === "out for delivery" || status === "order placed";
+    return (
+      status === "food processing" ||
+      status === "out for delivery" ||
+      status === "order placed"
+    );
   };
 
-  const liveOrders = data.filter(isLiveOrder);
-  const pastOrders = data.filter((order) => !isLiveOrder(order));
+  const liveOrders = Array.isArray(data) ? data.filter(isLiveOrder) : [];
+  const pastOrders = Array.isArray(data) ? data.filter((order) => !isLiveOrder(order)) : [];
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "Recently";
     try {
       const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return "Recently";
       return d.toLocaleDateString("en-US", {
         day: "numeric",
         month: "short",
@@ -91,25 +101,35 @@ const MyOrders = () => {
     return 1; // Order Placed
   };
 
+  // Swiggy/Zomato style reorder: replaces existing cart with items from this order
   const handleReorder = (order) => {
-    if (!order.items || order.items.length === 0) return;
+    if (!order || !Array.isArray(order.items) || order.items.length === 0) return;
 
+    const newCart = {};
     order.items.forEach((item) => {
-      const qty = item.quantity || 1;
-      for (let i = 0; i < qty; i++) {
-        addToCart(item._id);
+      if (item && item._id) {
+        newCart[item._id] = item.quantity || 1;
       }
     });
 
+    if (setCartItems) {
+      setCartItems(newCart);
+    }
+
+    try {
+      localStorage.setItem("cartItems", JSON.stringify(newCart));
+    } catch (e) {
+      console.warn("Could not save reordered cart to localStorage:", e);
+    }
+
+    const orderSuffix = order._id ? order._id.slice(-6).toUpperCase() : "";
     setReorderSuccess(
-      `Added ${order.items.length} items from Order #${order._id
-        .slice(-6)
-        .toUpperCase()} to cart! 🛒`
+      `Cart replaced with ${order.items.length} items from Order #${orderSuffix}! 🛒`
     );
     setTimeout(() => {
       setReorderSuccess("");
       navigate("/cart");
-    }, 1200);
+    }, 800);
   };
 
   const toggleExpand = (orderId) => {
@@ -228,6 +248,7 @@ const MyOrders = () => {
                   {liveOrders.map((order) => {
                     const step = getStatusStep(order.status);
                     const isExpanded = expandedOrder === order._id;
+                    const items = Array.isArray(order.items) ? order.items : [];
 
                     return (
                       <div key={order._id} className="order-card live-order-card">
@@ -238,7 +259,7 @@ const MyOrders = () => {
                               Active Delivery
                             </span>
                             <span className="order-id">
-                              Order #{order._id.slice(-6).toUpperCase()}
+                              Order #{order._id ? order._id.slice(-6).toUpperCase() : ""}
                             </span>
                           </div>
                           <div className="order-meta-right">
@@ -247,7 +268,7 @@ const MyOrders = () => {
                             </span>
                             <span className="order-status-pill status-live">
                               <span className="status-dot-blink"></span>
-                              {order.status}
+                              {order.status || "Food Processing"}
                             </span>
                           </div>
                         </div>
@@ -334,14 +355,14 @@ const MyOrders = () => {
                           </div>
                           <div className="items-text-flow">
                             <p className="items-line">
-                              {order.items.map((it, idx) => (
+                              {items.map((it, idx) => (
                                 <span key={idx} className="item-chip">
-                                  <strong>{it.quantity}x</strong> {it.name}
+                                  <strong>{it.quantity || 1}x</strong> {it.name}
                                 </span>
                               ))}
                             </p>
                             <span className="items-count-label">
-                              {order.items.reduce(
+                              {items.reduce(
                                 (sum, i) => sum + (i.quantity || 1),
                                 0
                               )}{" "}
@@ -367,8 +388,7 @@ const MyOrders = () => {
                               <circle cx="12" cy="10" r="3"></circle>
                             </svg>
                             <span className="address-text">
-                              Delivering to: {order.address.street},{" "}
-                              {order.address.city}
+                              Delivering to: {order.address.street || ""}, {order.address.city || ""}
                             </span>
                           </div>
                         )}
@@ -380,12 +400,12 @@ const MyOrders = () => {
                               Detailed Breakdown
                             </div>
                             <div className="breakdown-items-list">
-                              {order.items.map((item, i) => (
+                              {items.map((item, i) => (
                                 <div key={i} className="breakdown-item-row">
                                   <span>
                                     {item.name}{" "}
                                     <span className="item-qty-tag">
-                                      × {item.quantity}
+                                      × {item.quantity || 1}
                                     </span>
                                   </span>
                                   <span className="breakdown-price">
@@ -404,7 +424,7 @@ const MyOrders = () => {
                         <div className="card-footer-row">
                           <div className="order-total-group">
                             <span className="total-label">Total Amount</span>
-                            <span className="total-val">${order.amount}.00</span>
+                            <span className="total-val">${order.amount || 0}.00</span>
                           </div>
 
                           <div className="card-action-btns">
@@ -450,6 +470,7 @@ const MyOrders = () => {
                 <div className="orders-cards-grid">
                   {pastOrders.map((order) => {
                     const isExpanded = expandedOrder === order._id;
+                    const items = Array.isArray(order.items) ? order.items : [];
 
                     return (
                       <div
@@ -463,7 +484,7 @@ const MyOrders = () => {
                               Completed
                             </span>
                             <span className="order-id">
-                              Order #{order._id.slice(-6).toUpperCase()}
+                              Order #{order._id ? order._id.slice(-6).toUpperCase() : ""}
                             </span>
                           </div>
                           <div className="order-meta-right">
@@ -495,14 +516,14 @@ const MyOrders = () => {
                           </div>
                           <div className="items-text-flow">
                             <p className="items-line">
-                              {order.items.map((it, idx) => (
+                              {items.map((it, idx) => (
                                 <span key={idx} className="item-chip past-chip">
-                                  <strong>{it.quantity}x</strong> {it.name}
+                                  <strong>{it.quantity || 1}x</strong> {it.name}
                                 </span>
                               ))}
                             </p>
                             <span className="items-count-label">
-                              {order.items.reduce(
+                              {items.reduce(
                                 (sum, i) => sum + (i.quantity || 1),
                                 0
                               )}{" "}
@@ -518,12 +539,12 @@ const MyOrders = () => {
                               Detailed Breakdown
                             </div>
                             <div className="breakdown-items-list">
-                              {order.items.map((item, i) => (
+                              {items.map((item, i) => (
                                 <div key={i} className="breakdown-item-row">
                                   <span>
                                     {item.name}{" "}
                                     <span className="item-qty-tag">
-                                      × {item.quantity}
+                                      × {item.quantity || 1}
                                     </span>
                                   </span>
                                   <span className="breakdown-price">
@@ -537,9 +558,7 @@ const MyOrders = () => {
                             </div>
                             {order.address && (
                               <div className="breakdown-address">
-                                Delivered to: {order.address.street},{" "}
-                                {order.address.city}, {order.address.state} -{" "}
-                                {order.address.zipcode}
+                                Delivered to: {order.address.street || ""}, {order.address.city || ""}, {order.address.state || ""} - {order.address.zipcode || ""}
                               </div>
                             )}
                           </div>
@@ -550,7 +569,7 @@ const MyOrders = () => {
                           <div className="order-total-group">
                             <span className="total-label">Paid Amount</span>
                             <span className="total-val past-val">
-                              ${order.amount}.00
+                              ${order.amount || 0}.00
                             </span>
                           </div>
 
@@ -564,7 +583,7 @@ const MyOrders = () => {
                             <button
                               className="reorder-action-btn"
                               onClick={() => handleReorder(order)}
-                              title="Add items to cart"
+                              title="Replace cart and checkout"
                             >
                               <svg
                                 viewBox="0 0 24 24"
