@@ -141,11 +141,15 @@ const StoreContextProvider = ({ children }) => {
     // 2. Ping backend to wake Render free tier up immediately
     axios.get(url + "/").catch(() => {});
 
-    // 3. Load user token and cart data
+    // 3. Load user token, name, and cart data
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
       loadCartData(storedToken);
+    }
+    const storedName = localStorage.getItem("userName");
+    if (storedName) {
+      setUserName(storedName);
     }
   }, []);
 
@@ -157,6 +161,13 @@ const StoreContextProvider = ({ children }) => {
 
   const [showLogin, setShowLogin] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userName, setUserName] = useState(() => {
+    try {
+      return localStorage.getItem("userName") || "";
+    } catch (e) {
+      return "";
+    }
+  });
 
   const clearCart = () => {
     setCartItems({});
@@ -178,6 +189,8 @@ const StoreContextProvider = ({ children }) => {
     url,
     token,
     setToken,
+    userName,
+    setUserName,
     loadingFood,
     fetchFoodList,
     showLogin,

@@ -17,6 +17,8 @@ const Navbar = ({ setShowLogin }) => {
     setCartItems,
     searchTerm,
     setSearchTerm,
+    userName,
+    setUserName,
     url,
   } = useContext(StoreContext);
 
@@ -54,8 +56,10 @@ const Navbar = ({ setShowLogin }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("cartItems");
+    localStorage.removeItem("userName");
     setToken("");
     setCartItems({});
+    if (setUserName) setUserName("");
     setProfileOpen(false);
     navigate("/");
   };
@@ -327,35 +331,11 @@ const Navbar = ({ setShowLogin }) => {
             {profileOpen && (
               <div className="profile-popover-menu">
                 <div className="profile-popover-header">
-                  <span className="popover-greeting">Signed in as User</span>
+                  <span className="popover-greeting">
+                    Hi, <strong>{userName || "Foodie"}</strong> 👋
+                  </span>
+                  <span className="popover-status">Active Account</span>
                 </div>
-
-                <div
-                  className="profile-menu-item"
-                  onClick={() => {
-                    setProfileOpen(false);
-                    navigate("/myorders");
-                  }}
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="16"
-                    height="16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                  </svg>
-                  <span>My Orders</span>
-                </div>
-
-                <div className="profile-menu-divider"></div>
 
                 <div className="profile-menu-item logout-item" onClick={logout}>
                   <svg

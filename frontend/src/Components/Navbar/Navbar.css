@@ -369,7 +369,7 @@
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    width: 190px;
+    width: 200px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 14px;
@@ -380,17 +380,47 @@
 }
 
 .profile-popover-header {
-    padding: 10px 12px 8px 12px;
-    border-bottom: 1px solid #f1f5f9;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .popover-greeting {
-    font-size: 12px;
-    font-weight: 600;
-    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.profile-menu-item {
+.popover-greeting strong {
+    color: tomato;
+    font-weight: 700;
+}
+
+.popover-status {
+    font-size: 11px;
+    font-weight: 600;
+    color: #16a34a;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.popover-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+}
+
+.profile-menu-item.logout-item {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -398,33 +428,9 @@
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: #334155;
+    color: #dc2626;
     cursor: pointer;
     transition: all 0.15s ease;
-}
-
-.profile-menu-item:hover {
-    background: #f8fafc;
-    color: tomato;
-}
-
-.profile-menu-item svg {
-    color: #64748b;
-    transition: color 0.15s ease;
-}
-
-.profile-menu-item:hover svg {
-    color: tomato;
-}
-
-.profile-menu-divider {
-    height: 1px;
-    background: #f1f5f9;
-    margin: 4px 6px;
-}
-
-.profile-menu-item.logout-item {
-    color: #dc2626;
 }
 
 .profile-menu-item.logout-item svg {
