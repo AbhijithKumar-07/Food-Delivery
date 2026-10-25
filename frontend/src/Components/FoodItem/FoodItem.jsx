@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import "./FoodItem.css"
-import { assets } from '../../assets/assets'
+import { assets, food_images } from '../../assets/assets'
 import { StoreContext } from '../../Context/StoreContext'
 
 const FoodItem = ({id,name,price,description,image}) => {
@@ -8,16 +8,32 @@ const FoodItem = ({id,name,price,description,image}) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
 
-    // Fetch images directly from Database URL
+    // Resolve image instantly: check bundled assets first, then direct URL, then backend upload
     const getImageSrc = () => {
       if (!image) return assets.logo;
+      // If already a full URL or base64 data
       if (typeof image === 'string' && (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:'))) {
         return image;
+      }
+      // Check if image filename contains food_X (e.g. "1740055358609food_14.png" or "food_14.png")
+      if (typeof image === 'string') {
+        const match = image.match(/(food_\d+)/);
+        if (match && food_images[match[1]]) {
+          return food_images[match[1]];
+        }
       }
       return `${url}/images/${image}`;
     };
 
-    const handleImageError = () => {
+    const handleImageError = (e) => {
+      // If backend image fails or isn't loaded yet, try matching bundled image by name/filename
+      if (typeof image === 'string') {
+        const match = image.match(/(food_\d+)/);
+        if (match && food_images[match[1]] && e.target.src !== food_images[match[1]]) {
+          e.target.src = food_images[match[1]];
+          return;
+        }
+      }
       setHasError(true);
       setImageLoaded(true);
     };
